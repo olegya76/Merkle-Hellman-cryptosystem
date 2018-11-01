@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, shuffle
 
 def toBin(number):
     """
@@ -6,6 +6,12 @@ def toBin(number):
     output binary number
     """
     return '{0:08b}'.format(int(number))
+
+def gcd(a, b):
+    if b == 0:
+        return a
+    else:
+        return gcd(b, a % b)
 
 def knapsack_generate():
     """return list - overgrowth knapsack"""
@@ -22,10 +28,30 @@ def knapsack_generate():
 
     return lst
 
+def n_generate(in_lst):
+    sum = 0
+    for i in in_lst:
+        sum += i
+    return sum + randint(2, 100)
+
+def m_generate(n):
+    pot_m = list(range(2, 11))
+    shuffle(pot_m)
+    for i  in pot_m:
+        if(gcd(n, i) == 1):
+            return i
+    return -1
+
 #ord(' ') - symbol to ascii code
 #chr(int) - ascii code to symbol
 
 if __name__ == '__main__':
     num = input('Input numper: ')
     print('In binary u num is', toBin(num))
-    print(knapsack_generate())
+    lst = knapsack_generate()
+    print('close key list', lst)
+    n = n_generate(lst)
+    print('n', n)
+    m = m_generate(n)
+    print('m', m)
+    print('gcd(n, m)=', gcd(n,m))
