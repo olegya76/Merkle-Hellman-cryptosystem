@@ -42,6 +42,16 @@ def m_generate(n):
             return i
     return -1
 
+def open_key_generate(lst, n, m):
+    new_lst = []
+    for i in lst:
+        print('i', i, 'n', n, 'm', m)
+        num = (i * m) % n
+        new_lst.append(num)
+    return new_lst
+
+
+
 #ord(' ') - symbol to ascii code
 #chr(int) - ascii code to symbol
 
@@ -55,3 +65,5 @@ if __name__ == '__main__':
     m = m_generate(n)
     print('m', m)
     print('gcd(n, m)=', gcd(n,m))
+    open_key = open_key_generate(lst, n, m)
+    print('Open key:', open_key)
