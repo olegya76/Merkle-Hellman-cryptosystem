@@ -1,4 +1,5 @@
 from random import randint, shuffle
+from tkinter import *
 
 def toBin(number):
     """
@@ -97,7 +98,134 @@ def decryption(crypt, m, n, c_key):
     symbol =  chr(ascii_code)
     return symbol
 
+def mainWindow():
+    main_window = Tk()
+    main_window.title('Криптосистема Меркля-Хеллмана')
+    main_window.geometry('640x380')
 
+    #Закрытый ключ: подпись и поле
+    close_key_label = Label(None, text = 'Супервозрастающий рюкзак: ', font = 14)
+    close_key_label.place(x=10, y=10)
+    close_key_text = StringVar()
+    close_key_entry = Entry(None, textvariable = close_key_text, width = 25)
+    close_key_entry.configure(state = 'readonly')
+    close_key_entry.place(x=270, y=10)
+    close_key_text.set(lst)
+
+    #N подпись и поле
+    n_label = Label(None, text = 'N: ', font = 14)
+    n_label.place(x=10, y=40)
+    n_text = StringVar()
+    n_entry = Entry(None, textvariable = n_text, width = 5)
+    n_entry.configure(state = 'readonly')
+    n_entry.place(x=40, y=40)
+    n_text.set(n)
+
+    #M подпись и поле
+    m_label = Label(None, text = 'M: ', font = 14)
+    m_label.place(x=10, y=70)
+    m_text = StringVar()
+    m_entry = Entry(None, textvariable = m_text,  width = 5)
+    m_entry.configure(state = 'readonly')
+    m_entry.place(x=40, y=70)
+    m_text.set(m)
+
+    #gcd(n,m) подпись и поле
+    gcd_n_m_label = Label(None, text = 'gcd(n, m): ', font = 14)
+    gcd_n_m_label.place(x=10, y=100)
+    gcd_n_m_text = StringVar()
+    gcd_n_m_entry = Entry(None, textvariable = gcd_n_m_text,  width = 5)
+    gcd_n_m_entry.configure(state = 'readonly')
+    gcd_n_m_entry.place(x=100, y=100)
+    gcd_n_m_text.set(gcd(n,m))
+
+    #Открытый ключ: подпись и поле
+    open_key_label = Label(None, text = 'Открытый ключ: ', font = 14)
+    open_key_label.place(x=10, y=130)
+    open_key_text = StringVar()
+    open_key_entry = Entry(None, textvariable = open_key_text, width = 25)
+    open_key_entry.configure(state = 'readonly')
+    open_key_entry.place(x=160, y=130)
+    open_key_text.set(open_key)
+
+    #Символ: подпись и поле
+    symbol_label = Label(None, text = 'Введите символ, который будем передавать: ', font = 14)
+    symbol_label.place(x=10, y=160)
+    symbol_text = StringVar()
+    symbol_entry = Entry(None, textvariable = symbol_text,  width = 5)
+    # symbol_entry.configure(state = 'readonly')
+    symbol_entry.place(x=400, y=160)
+    #symbol_text.set(m)
+
+    #Символ в бонарном видк: подпись и поле
+    symbol_bin_label = Label(None, text = 'Символ в бинарном виде: ', font = 14)
+    symbol_bin_label.place(x=10, y=190)
+    symbol_bin_text = StringVar()
+    symbol_bin_entry = Entry(None, textvariable = symbol_bin_text, width = 18)
+    symbol_bin_entry.configure(state = 'readonly')
+    symbol_bin_entry.place(x=240, y=190)
+    symbol_bin_text.set(list(map(int, list(toBin(ord(symb_ctypt))))))
+
+    #Криптограма: подпись и поле
+    crypt_label = Label(None, text = 'Зашифрованный символ: ', font = 14)
+    crypt_label.place(x=10, y=220)
+    crypt_text = StringVar()
+    crypt_entry = Entry(None, textvariable = crypt_text,  width = 5)
+    crypt_entry.configure(state = 'readonly')
+    crypt_entry.place(x=240, y=220)
+    crypt_text.set(crypt)
+
+    #Мультипликативно обратное m по модулю n: подпись и поле
+    opposite_label = Label(None, text = 'Мультипликативное обратное m по модулю n: ', font = 14)
+    opposite_label.place(x=10, y=250)
+    opposite_text = StringVar()
+    opposite_entry = Entry(None, textvariable = opposite_text,  width = 5)
+    opposite_entry.configure(state = 'readonly')
+    opposite_entry.place(x=410, y=250)
+    opposite_text.set(crypt)
+
+    #Преобразованая криптограма: подпись и поле
+    new_crypt_label = Label(None, text = 'Преобразованый полученный символ (C*m^-l(mod n)): ', font = 14)
+    new_crypt_label.place(x=10, y=280)
+    new_crypt_text = StringVar()
+    new_crypt_entry = Entry(None, textvariable = new_crypt_text,  width = 5)
+    new_crypt_entry.configure(state = 'readonly')
+    new_crypt_entry.place(x=480, y=280)
+    m_inverse = multiplicative_inverse(m, n)
+    new_crypt_text.set((crypt * m_inverse) % n)
+
+    #Решение задачи о рюкзаках с криптограммой: подпись и поле
+    new_bin_label = Label(None, text = 'Решение задачи о рюкзаках: ', font = 14)
+    new_bin_label.place(x=10, y=310)
+    new_bin_text = StringVar()
+    new_bin_entry = Entry(None, textvariable = new_bin_text, width = 18)
+    new_bin_entry.configure(state = 'readonly')
+    new_bin_entry.place(x=270, y=310)
+    m_inverse = multiplicative_inverse(m, n)
+    new_crypt = (crypt * m_inverse) % n
+    b_code = [None] * 8
+    k = 7
+    for i in range(8):
+        if(new_crypt >= lst[k]):
+            new_crypt -= lst[k]
+            b_code[k] = '1'
+        else:
+            b_code[k] = '0'
+        k -= 1
+    byte = ''.join(b_code)
+    new_bin_text.set(b_code)
+
+    #Разшифрованый символ: подпись и поле
+    new_symbol_label = Label(None, text = 'Разшифрованый символ: ', font = 14)
+    new_symbol_label.place(x=10, y=340)
+    new_symbol_text = StringVar()
+    new_symbol_entry = Entry(None, textvariable = new_symbol_text,  width = 5)
+    new_symbol_entry.configure(state = 'readonly')
+    new_symbol_entry.place(x=240, y=340)
+    new_symbol_text.set(symbol)
+
+
+    main_window.mainloop()
 
 #ord(' ') - symbol to ascii code
 #chr(int) - ascii code to symbol
@@ -121,3 +249,4 @@ if __name__ == '__main__':
     print(multiplicative_inverse_num)
     symbol = decryption(crypt, m, n, lst)
     print('symbol which u send - ', symbol)
+    mainWindow()
